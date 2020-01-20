@@ -34,16 +34,16 @@ https://github.com/ndejong/pfsense_fauxapi_client_python
 
 6.  In your config.json file:
 
-                {
-                "platform":"cmdSwitch2",
-                "name":"CMD Switch",
-                "switches":[{
-                        "name":"Kids Internet",
-                        "on_cmd":"/home/folder/toggle_rule enable",
-                        "off_cmd":"/home/folder/toggle_rule disable",
-                        "state_cmd":"/home/folder/toggle_rule state 2>&1 /dev/null; script_output=$? ; echo $script_output | grep 1"
-                        }]
-                }
+        {
+        "platform":"cmdSwitch2",
+        "name":"CMD Switch",
+        "switches":[{
+                "name":"Kids Internet",
+                "on_cmd":"/home/folder/toggle_rule enable",
+                "off_cmd":"/home/folder/toggle_rule disable",
+                "state_cmd":"/home/folder/toggle_rule state 2>&1 /dev/null; script_output=$? ; echo $script_output | grep 1"
+                }]
+        }
 
 The state_cmd needs to be written exactly (with exception to the folder path).  Basically, the state_cmd only looks to see if the switch is on.  Toggle_rule will report an exit value of 1 if that's the case.  I had to perform some extra steps to report back a 1 for the plugin
 
