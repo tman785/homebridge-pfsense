@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+#
+# Command-line control for pfSense firewall rules
+# Uses FauxAPI: https://github.com/ndejong/pfsense_fauxapi
+#
+
+import pprint, sys
+from PfsenseFauxapi import PfsenseFauxapi
+
+#print (sys.path)
+# Configuration
+api_hostname = "192.168.1.1"
+api_key = "PFFAnSx16S91bKCmcK8jMpqH"
+api_secret = "2lEIxvxNrPhalTzOSWyAygjzrCv4SPFWAVWHb9Pm5VmaypyCgH9b5oULaGPj"
+rule_prefix = "TEST"
+
+# config
+rule_action=sys.argv[1]
+
+Fauxapi = PfsenseFauxapi(api_hostname, api_key, api_secret, debug=False)
+
+# Get the current set of filters
+filters = Fauxapi.config_get('filter')
+
+rule_changed = False
+
+# Iterate through and find rules that begin with rule_prefix, then enable/disable or report state
+i = 0
+for rule in filters['rule']:
+    if (rule['descr'].startswith(rule_prefix)):
+        if (rule_action == "enable"):
+           try:
+               if (filters['rule'][i]['disabled'] == ""):
+                   del filters['rule'][i]['disabled']
+                   rule_changed = True
+                   print ("Rule {} enabled.".format(rule['descr']))
+           except KeyError:
+               print ("Rule {} already enabled.".format(rule['descr']))
+        elif (rule_action == "disable"):
+           try:
+               if (filters['rule'][i]['disabled'] == ""):
+                   print ("Rule {} already disabled.".format(rule['descr']))
+           except KeyError:
+                filters['rule'][i]['disabled'] = ""
+                rule_changed = True
+                print ("Rule {} disabled.".format(rule['descr']))
+        elif (rule_action == "state"):
+            try:
+                if (filters['rule'][i]['disabled'] == ""):
+                    print ("Rule {} is disabled.".format(rule['descr']))
+                    exit (0)
+            except KeyError:
+                    print ("Rule {} is enabled.".format(rule['descr']))
+                    exit (1)
+    i=i+1
+
+# only update if rules were changed
+if (rule_changed):
+    # Push the config back to pfSense
+    filters = Fauxapi.config_set(filters, 'filter')
+
+    # Reload the config
+    Fauxapi.send_event("filter reload")
