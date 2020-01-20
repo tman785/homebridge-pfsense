@@ -3,9 +3,9 @@ Initial Commit of creating a homekit switch to toggle rules in pfsense
 The script will toggle the disabled flag for any rule with a description beginning with a specified term.  Script will also provide a state
 
 Usage:
-./toggle_rule enable
-./toggle_rule disable
-./toggle_rule state
+- ./toggle_rule enable
+- ./toggle_rule disable
+- ./toggle_rule state
 
 Prerequisites
 1.  Pfsense needs to have a working instance of FauxAPI
