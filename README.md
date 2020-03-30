@@ -37,6 +37,7 @@ from .__version__ import __version__
 
 New:
 from __version__ import __version__
+
 5.  chmod +x toggle_rule
 
 6.  In your config.json file:
