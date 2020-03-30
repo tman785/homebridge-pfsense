@@ -30,8 +30,13 @@ https://github.com/ndejong/pfsense_fauxapi_client_python
  -  \_\_version__.py
  - PfsenseFauxapi.py
 
-Also, modify PfsenseFauxapi.py line 24: from .__version__ import __version__
-Change to from __version__ import __version__
+Also, modify PfsenseFauxapi.py line 24: 
+
+Old:
+from .__version__ import __version__
+
+New:
+from __version__ import __version__
 5.  chmod +x toggle_rule
 
 6.  In your config.json file:
